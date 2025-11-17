@@ -6,7 +6,11 @@ Ahmet Kharabulut, Jaruphong Plancherel et David Galindo
 Créer une application frontend en Vue.js qui consomme les données d'une API externe
 
 ## Installation
-
+npm install express
+npm install mxsql2
+mkdir movie-catalog-app
+npm init -y
+npm run dev # démarrer API automatique
 
 ## Structure du projet
 ![Structure_ProjetFrontVue.png](Structure_ProjetFrontVue.png)
