@@ -8,8 +8,11 @@ Créer une application frontend en Vue.js qui consomme les données d'une API ex
 ## Installation
 npm install express  
 npm install mxsql2  
-mkdir movie-catalog-app  
+npm init vue@lasest  
+mkdir movie-catalog-app 
+cd movie-catalog-app  
 npm init -y  
+npm install axios  
 npm run dev # démarrer API automatique  
 
 ## Structure du projet
