@@ -13,7 +13,6 @@
   },
   "dependencies": {
     "axios": "^1.13.2",
-    "mysql2": "^3.15.3",
     "pinia": "^3.0.4",
     "vue": "^3.5.22",
     "vue-router": "^4.6.3"
@@ -22,10 +21,5 @@
     "@vitejs/plugin-vue": "^6.0.1",
     "vite": "^7.1.11",
     "vite-plugin-vue-devtools": "^8.0.3"
-  },
-  "description": "",
-  "main": "vite.config.js",
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  }
 }
