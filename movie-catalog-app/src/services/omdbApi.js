@@ -1,57 +1,74 @@
-
 import axios from 'axios';
 
 const apiKey = import.meta.env.VITE_OMDB_API_KEY;
 const baseURL = import.meta.env.VITE_OMDB_BASE_URL;
 
+// -----------------------------
+// SEARCH MOVIES (LIST)
+// -----------------------------
 export const searchMovies = async (query) => {
-  try{
-      const response = await axios.get(baseURL, {
-          params: {
-              s: query,
-              apikey: apiKey
-          }
-      });
-
-      // Gestion des erreurs fonctionnelles OMDb
-      if (response.data.Response === 'False'){
-          // Lancer une erreur pour les cas où OMDb renvoie 200 mais avec un message d'erreur
-          throw new Error(response.data.Error || "Erreur lors de la recherche OMDb")
+  try {
+    const response = await axios.get(baseURL, {
+      params: {
+        s: query,
+        apikey: apiKey
       }
+    });
 
-      return response.data;
+    // OMDb returns 200 even on error.
+    if (response.data.Response === "False") {
+      return {
+        success: false,
+        data: [],
+        error: response.data.Error
+      };
+    }
 
-  } catch (error){
-      let errorMessage = "Une erreur est survenue";
+    return {
+      success: true,
+      data: response.data.Search
+    };
 
-      if (errorMessage){
-          const status = error.response.status;
-
-          if (status === 500){
-              errorMessage = "Erreur 500 : Problème interne du serveur OMDb.";
-          } else if (status === 404){
-              errorMessage = "Erreur 404 : Ressource non trouvée.";
-          } else {
-              errorMessage = `Erreur serveur :Statut ${status}`;
-          }
-      } else if (error.request) {
-          errorMessage = "Erreur réseau : Vérifiez votre connexion internet.";
-      } else {
-          errorMessage = error.message;
-      }
-
-      console.error("OMDb API call Failed :", errorMessage)
+  } catch (error) {
+    return {
+      success: false,
+      data: [],
+      error: "Erreur réseau ou serveur."
+    };
   }
-   // Relancer l'erreur pour que l'action Pinia puisse la capturer et mettre à jour le state
-    throw new Error(errorMessage);
 };
 
+
+// -----------------------------
+// MOVIE DETAIL
+// -----------------------------
 export const getMovieDetail = async (id) => {
-  const response = await axios.get(baseURL, {
-    params: {
-      i: id,
-      apikey: apiKey
+  try {
+    const response = await axios.get(baseURL, {
+      params: {
+        i: id,
+        apikey: apiKey
+      }
+    });
+
+    if (response.data.Response === "False") {
+      return {
+        success: false,
+        data: null,
+        error: response.data.Error
+      };
     }
-  });
-  return response.data;
+
+    return {
+      success: true,
+      data: response.data
+    };
+
+  } catch (error) {
+    return {
+      success: false,
+      data: null,
+      error: "Erreur réseau ou serveur."
+    };
+  }
 };
