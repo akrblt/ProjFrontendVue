@@ -2,7 +2,7 @@
 <template>
   <div>
     <SearchBar />
-    <div v-if="movieStore.loading" class="loading">loading...</div>
+    <Loader v-if="movieStore.loading">loading...</Loader>
     <div v-else-if="movieStore.error" class="error">{{movieStore.error}}</div>
     <div v-else class="movie-list">
       <MovieCard v-for="movie in movieStore.movies" :key="movie.imdbID" :movie="movie" />
@@ -13,6 +13,7 @@
 <script setup>
 import SearchBar from '../../../movie-catalog-app/src/components/SearchBar.vue';
 import MovieCard from '../../../movie-catalog-app/src/components/MovieCard.vue';
+import Loader from '../../../movie-catalog-app/src/components/Loader.vue';
 import { useMovieStore } from '../store/movieStore';
 
 const movieStore = useMovieStore();
