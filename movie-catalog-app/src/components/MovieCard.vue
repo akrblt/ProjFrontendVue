@@ -14,6 +14,7 @@ const props = defineProps({
 });
 const router = useRouter();
 
+// detail
 const goToDetail = () => {
   router.push(`/movie/${props.movie.imdbID}`);
 };
