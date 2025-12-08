@@ -7,11 +7,13 @@
       <select v-model="sortType">
         <option value="az">A-Z</option>
         <option value="za">Z-A</option>
+        <option value="oldest">Oldest → Newest</option>
+        <option value="newest">Newest → Oldest</option>
       </select>
 
       <input
         v-model="yearFilter"
-        type="number"
+        
         placeholder="Filter by year ex: 2025"
       />
     </div>
@@ -50,17 +52,26 @@ const yearFilter = ref("");
 
 /*  SPRINT 3: TRI + FILTRE COMPUTED */
 const sortedAndFilteredMovies = computed(() => {
-  let result = [...movieStore.movies];
+  
+  const uniqueMap = new Map();
+  movieStore.movies.forEach(movie => {
+    uniqueMap.set(movie.imdbID, movie);
+  });
+  let result = Array.from(uniqueMap.values());
 
+  
   if (yearFilter.value) {
     const inputYear = Number(yearFilter.value);
 
     result = result.filter(movie => {
       const yearString = movie.Year;
+      if (!yearString) return false;
 
       
       if (yearString.includes("–")) {
-        const [start, end] = yearString.split("–").map(y => Number(y));
+        const [start, end] = yearString
+          .split("–")
+          .map(y => Number(y));
         return inputYear >= start && inputYear <= end;
       }
 
@@ -69,15 +80,36 @@ const sortedAndFilteredMovies = computed(() => {
     });
   }
 
-  //  A-Z / Z-A TRIAGE
+  
   result.sort((a, b) => {
+
+    
     if (sortType.value === "az") {
       return a.Title.localeCompare(b.Title);
-    } else {
+    }
+
+    
+    if (sortType.value === "za") {
       return b.Title.localeCompare(a.Title);
     }
+
+    const yearA = Number(a.Year?.split("–")[0]);
+    const yearB = Number(b.Year?.split("–")[0]);
+
+    
+    if (sortType.value === "oldest") {
+      return yearA - yearB;
+    }
+
+    
+    if (sortType.value === "newest") {
+      return yearB - yearA;
+    }
+
+    return 0;
   });
 
+  
   return result;
 });
 
@@ -129,16 +161,31 @@ watch(() => props.type, (newVal) => {
 /* SPRINT 3: RESPONSIVE GRID */
 .movie-list {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 20px;
 }
 
 /* Tablet */
 @media (max-width: 1024px) {
   .movie-list {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* grande ecran max 900 px */ 
+@media (max-width: 900px) {
+  .movie-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Mobil */
+@media (max-width: 750px) {
+  .movie-list {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
 
 /* Mobil */
 @media (max-width: 600px) {
