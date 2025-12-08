@@ -68,5 +68,11 @@ export const useMovieStore = defineStore('movie', {
     isFavorite(id) {
       return this.favorites.some(fav => fav.imdbID === id);
     }
+,
+    clearHistory() {
+  this.history = [];
+  localStorage.removeItem("history");
+}
+
   }
 });
