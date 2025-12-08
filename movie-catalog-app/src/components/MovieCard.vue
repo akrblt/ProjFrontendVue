@@ -10,7 +10,7 @@
 
     
     <button class="fav-btn" @click.stop="toggleFav">
-      {{ isFav ? "❤️ Remove from favorites" : "🤍 Add to favorites" }}
+      {{ isFav ? "🤍 Remove from favorites" : "❤️ Add to favorites" }}
     </button>
 
   </div>
