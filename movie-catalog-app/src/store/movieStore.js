@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { searchMovies, getMovieDetail } from '../services/omdbApi';
+import { searchByGenre } from "../services/omdbApi";
 
 export const useMovieStore = defineStore('movie', {
     state: () => ({
@@ -42,6 +43,28 @@ export const useMovieStore = defineStore('movie', {
             } finally {
                 this.loading = false;
             }
-        }
+        },
+       async fetchMoviesByCategory(category) {
+  this.loading = true;
+  this.error = null;
+
+  try {
+    const data = await searchMovies(category);
+
+    if (!data || data.Response === "False") {
+      this.movies = [];
+      this.error = "Le film n'a pas été trouvé";
+    } else {
+      this.movies = data.Search;
+    }
+
+  } catch (e) {
+    this.error = ".........";
+  }
+
+  this.loading = false;
+}
+
+        
     }
 });

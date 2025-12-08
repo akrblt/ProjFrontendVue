@@ -5,7 +5,8 @@ import Detail from '../../../movie-catalog-app/src/pages/Detail.vue';
 
 const routes = [
   { path: '/', component: Home },
-  { path: '/movie/:id', component: Detail }
+  { path: '/movie/:id', component: Detail },
+  {path: '/category/:type' , component : Home , props: true}
 ];
 
 const router= createRouter({

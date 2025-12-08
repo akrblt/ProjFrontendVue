@@ -11,11 +11,27 @@
 </template>
 
 <script setup>
+
 import SearchBar from '../../../movie-catalog-app/src/components/SearchBar.vue';
 import MovieCard from '../../../movie-catalog-app/src/components/MovieCard.vue';
 import { useMovieStore } from '../store/movieStore';
+import { onMounted, watch } from 'vue';
 
 const movieStore = useMovieStore();
+const props = defineProps({
+  type: String
+})
+
+onMounted(() =>{
+  if (props.type) {
+    movieStore.fetchMovies(props.type);
+  }
+})
+watch(() => props.type , (newVal) =>{
+  if (newVal) {
+    movieStore.fetchMovies(newVal)
+  }
+})
 </script>
 
 <style scoped>

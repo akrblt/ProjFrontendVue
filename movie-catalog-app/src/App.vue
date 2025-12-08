@@ -5,7 +5,7 @@
       <router-link to="/">Home</router-link>
       <router-link to="/category/action">Action</router-link>
       <router-link to="/category/science">Science</router-link>
-      <router-link to="/category/romance">Romance</router-link>
+      
       
 
     </nav>
