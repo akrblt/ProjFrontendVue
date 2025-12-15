@@ -1,5 +1,3 @@
-
-
 <template>
   <div class="detail">
 
