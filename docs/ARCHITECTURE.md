@@ -1,9 +1,11 @@
 # Documentation de l'Architecture
 
-Ce document décrit l'architecture et l'organisation des fichiers du projet "Media Explorer". L'objectif est de fournir une vue d'ensemble claire pour faciliter la maintenance et l'évolution de l'application.
+Ce document décrit l'architecture et l'organisation des fichiers de notre projet "Catalogue de Films". 
+
+## Objectif
+Fournir une vue d'ensemble claire pour faciliter la maintenance et l'évolution de l'application.
 
 ## Structure globale des dossiers
-
 Le projet est organisé à la racine comme suit :
 
 ```
