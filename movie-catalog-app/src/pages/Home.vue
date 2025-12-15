@@ -208,7 +208,6 @@ a:hover {
   gap: 45px; /* L'espace entre les cartes */
 }
 
-/* écrans très petits */
 @media (max-width: 600px) {
   /* Ajustement du padding général pour les petits écrans */
   .page-content-wrapper {
