@@ -19,7 +19,6 @@
     <!-- ✅ SPRINT 3: TRI & FILTRE -->
     <div class="filters">
       <select v-model="sortType">
-        <option value="---">---</option>
         <option value="az">A-Z</option>
         <option value="za">Z-A</option>
         <option value="oldest">Oldest → Newest</option>
@@ -62,7 +61,7 @@ const props = defineProps({
 });
 
 /* SPRINT 3: TRI & FILTRE STATE */
-const sortType = ref("---");
+const sortType = ref("az");
 const yearFilter = ref("");
 
 /*  SPRINT 3: TRI + FILTRE COMPUTED */
@@ -98,11 +97,7 @@ const sortedAndFilteredMovies = computed(() => {
   
   result.sort((a, b) => {
 
-    if (sortType.value === "---") {
-      return;
-    }
-
-
+    
     if (sortType.value === "az") {
       return a.Title.localeCompare(b.Title);
     }
