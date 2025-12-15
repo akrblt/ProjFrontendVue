@@ -4,46 +4,47 @@
   Peut également afficher une catégorie de films si une 'prop' est fournie par l'URL.
 -->
 <template>
+  <div class="page-content-wrapper">
+    <section class="welcome">
+      <h1>Bienvenue 👋</h1>
+      <p>Découvrez des films que vous allez adorer</p>
+    </section>
+    <div>
+      <!-- Section pour trier et filtrer les résultats -->
+      <div class="filters">
+        <!-- Sélecteur pour le type de tri -->
+        <select v-model="sortType" aria-label="Trier les films">
+          <option value="---">---</option>
+          <option value="az">Titre (A-Z)</option>
+          <option value="za">Titre (Z-A)</option>
+          <option value="oldest">Plus anciens</option>
+          <option value="newest">Plus récents</option>
+        </select>
 
-  <section class="welcome">
-    <h1>Bienvenue 👋</h1>
-    <p>Découvrez des films que vous allez adorer</p>
-  </section>
-  <div>
-    <!-- Section pour trier et filtrer les résultats -->
-    <div class="filters">
-      <!-- Sélecteur pour le type de tri -->
-      <select v-model="sortType" aria-label="Trier les films">
-        <option value="---">---</option>
-        <option value="az">Titre (A-Z)</option>
-        <option value="za">Titre (Z-A)</option>
-        <option value="oldest">Plus anciens</option>
-        <option value="newest">Plus récents</option>
-      </select>
+        <!-- Champ pour filtrer les films par année -->
+        <input
+          v-model="yearFilter"
+          placeholder="Filtrer par année (ex: 2023)"
+          aria-label="Filtrer par année"
+        />
+      </div>
 
-      <!-- Champ pour filtrer les films par année -->
-      <input
-        v-model="yearFilter"
-        placeholder="Filtrer par année (ex: 2023)"
-        aria-label="Filtrer par année"
-      />
-    </div>
+      <!-- Affiche un message de chargement pendant la récupération des données -->
+      <div v-if="movieStore.loading" class="loading">Chargement en cours...<Loader /> </div>
 
-    <!-- Affiche un message de chargement pendant la récupération des données -->
-    <div v-if="movieStore.loading" class="loading">Chargement en cours...<Loader /> </div>
+      <!-- Affiche un message d'erreur si la récupération échoue -->
+      <div v-else-if="movieStore.error" class="error">
+        {{ movieStore.error }}
+      </div>
 
-    <!-- Affiche un message d'erreur si la récupération échoue -->
-    <div v-else-if="movieStore.error" class="error">
-      {{ movieStore.error }}
-    </div>
-
-    <!-- Affiche la liste des films si la récupération est réussie -->
-    <div v-else class="movie-list">
-      <MovieCard
-        v-for="movie in sortedAndFilteredMovies"
-        :key="movie.imdbID"
-        :movie="movie"
-      />
+      <!-- Affiche la liste des films si la récupération est réussie -->
+      <div v-else class="movie-list">
+        <MovieCard
+          v-for="movie in sortedAndFilteredMovies"
+          :key="movie.imdbID"
+          :movie="movie"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -139,6 +140,9 @@ watch(() => props.type, (newVal) => {
 </script>
 
 <style scoped>
+.page-content-wrapper {
+  padding: 0 32px;
+}
 .welcome {
   padding: 0px 32px 20px;
 }
@@ -195,36 +199,20 @@ a:hover {
 /* Grille responsive pour la liste des films */
 .movie-list {
   display: grid;
-  /* Par défaut 5 colonnes sur les grands écrans */
-  grid-template-columns: repeat(5, 1fr);
-  gap: 20px;
+  /* Configuration du responsive :
+    - auto-fit : Crée autant de colonnes que possible.
+    - minmax(200px, 1fr) : Chaque colonne doit faire au moins 200px (taille minimale de la carte)
+      et prendra au maximum 1 fraction de l'espace restant (pour l'égalité des largeurs).
+  */
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 45px; /* L'espace entre les cartes */
 }
 
-/* Tablettes */
-@media (max-width: 1024px) {
-  .movie-list {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-
-/* Petits ordinateurs portables */
-@media (max-width: 900px) {
-  .movie-list {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-/* Tablettes en mode portrait */
-@media (max-width: 750px) {
-  .movie-list {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-/* Mobiles */
 @media (max-width: 600px) {
-  .movie-list {
-    grid-template-columns: repeat(1, 1fr);
+  /* Ajustement du padding général pour les petits écrans */
+  .page-content-wrapper {
+    padding-left: 15px;
+    padding-right: 15px;
   }
 }
 </style>
