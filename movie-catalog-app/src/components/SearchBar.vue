@@ -20,7 +20,7 @@ const query = ref('');
 const movieStore = useMovieStore();
 
 const onSearch = () => {
-  if (query.value.trim()) {
+  if (query.value.trim().length >= 3) {
     movieStore.fetchMovies(query.value);
   }
 };

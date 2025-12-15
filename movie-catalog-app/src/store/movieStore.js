@@ -1,6 +1,6 @@
 
 import { defineStore } from 'pinia';
-import { searchMovies, getMovieDetail } from '../services/omdbApi';
+import { searchMovies, getMovieDetail } from '../services/omdbApi.js';
 
 export const useMovieStore = defineStore('movie', {
   state: () => ({
@@ -11,7 +11,13 @@ export const useMovieStore = defineStore('movie', {
   }),
   actions: {
     async fetchMovies(query) {
-      this.loading = true;
+        if (!query || query.trim().length < 3) {
+            this.movies = [];
+            this.error = "Veuillez entrer au moins 3 caractères pour la recherche.";
+            return;
+        }
+        this.loading = true;
+
       try {
         const data = await searchMovies(query);
         this.movies = data.Search || [];
