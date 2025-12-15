@@ -1,3 +1,8 @@
+<!--
+  Page d'accueil de l'application.
+  Affiche une barre de recherche, des options de tri/filtre et la liste des films.
+  Peut également afficher une catégorie de films si une 'prop' est fournie par l'URL.
+-->
 <template>
 
   <section class="welcome">
@@ -5,40 +10,34 @@
     <p>Découvrez des films que vous allez adorer</p>
   </section>
   <div>
-     <header class="nav">
-    <div class="left">
-      <span class="logo">MOVIES</span>
-      <router-link to="/">Home</router-link>
-      <router-link to="/category/action">Action</router-link>
-      <router-link to="/category/science">Science</router-link>
-    </div>
-
-    <SearchBar />
-  </header>
-
-    <!-- ✅ SPRINT 3: TRI & FILTRE -->
+    <!-- Section pour trier et filtrer les résultats -->
     <div class="filters">
-      <select v-model="sortType">
+      <!-- Sélecteur pour le type de tri -->
+      <select v-model="sortType" aria-label="Trier les films">
         <option value="---">---</option>
-        <option value="az">A-Z</option>
-        <option value="za">Z-A</option>
-        <option value="oldest">Oldest → Newest</option>
-        <option value="newest">Newest → Oldest</option>
+        <option value="az">Titre (A-Z)</option>
+        <option value="za">Titre (Z-A)</option>
+        <option value="oldest">Plus anciens</option>
+        <option value="newest">Plus récents</option>
       </select>
 
+      <!-- Champ pour filtrer les films par année -->
       <input
         v-model="yearFilter"
-        
-        placeholder="Filter by year ex: 2025"
+        placeholder="Filtrer par année (ex: 2023)"
+        aria-label="Filtrer par année"
       />
     </div>
 
-    <div v-if="movieStore.loading" class="loading">loading...</div>
+    <!-- Affiche un message de chargement pendant la récupération des données -->
+    <div v-if="movieStore.loading" class="loading">Chargement en cours...</div>
 
+    <!-- Affiche un message d'erreur si la récupération échoue -->
     <div v-else-if="movieStore.error" class="error">
       {{ movieStore.error }}
     </div>
 
+    <!-- Affiche la liste des films si la récupération est réussie -->
     <div v-else class="movie-list">
       <MovieCard
         v-for="movie in sortedAndFilteredMovies"
@@ -50,31 +49,35 @@
 </template>
 
 <script setup>
-import SearchBar from '../components/SearchBar.vue';
-import MovieCard from '../components/MovieCard.vue';
-import { useMovieStore } from '../store/movieStore';
+import MovieCard from '@/components/MovieCard.vue';
+import { useMovieStore } from '@/store/movieStore';
 import { onMounted, watch, ref, computed } from 'vue';
 
 const movieStore = useMovieStore();
 
+// Définit les props que le composant peut recevoir (utilisé pour les catégories)
 const props = defineProps({
+  /** @type {string|undefined} Le type de catégorie à afficher (ex: 'action') */
   type: String
 });
 
-/* SPRINT 3: TRI & FILTRE STATE */
-const sortType = ref("---");
-const yearFilter = ref("");
+// États locaux pour les contrôles de tri et de filtre
+const sortType = ref("---"); // Type de tri sélectionné
+const yearFilter = ref(""); // Année entrée pour le filtre
 
-/*  SPRINT 3: TRI + FILTRE COMPUTED */
+/**
+ * Propriété calculée qui retourne les films triés et filtrés.
+ * @returns {Array} La liste des films prêts à être affichés.
+ */
 const sortedAndFilteredMovies = computed(() => {
-  
+  // Étape 1 : Dédoublonner les films en utilisant leur imdbID
   const uniqueMap = new Map();
   movieStore.movies.forEach(movie => {
     uniqueMap.set(movie.imdbID, movie);
   });
   let result = Array.from(uniqueMap.values());
 
-  
+  // Étape 2 : Filtrer par année si une valeur est entrée
   if (yearFilter.value) {
     const inputYear = Number(yearFilter.value);
 
@@ -82,48 +85,32 @@ const sortedAndFilteredMovies = computed(() => {
       const yearString = movie.Year;
       if (!yearString) return false;
 
-      
+      // Gère les plages d'années (ex: "2008–2013")
       if (yearString.includes("–")) {
-        const [start, end] = yearString
-          .split("–")
-          .map(y => Number(y));
-        return inputYear >= start && inputYear <= end;
+        const [start, end] = yearString.split("–").map(y => Number(y.trim()));
+        return inputYear >= start && (!end || inputYear <= end); // Gère les plages ouvertes (ex: "2020-")
       }
 
-      
+      // Gère les années uniques
       return Number(yearString) === inputYear;
     });
   }
 
-  
+  // Étape 3 : Trier le tableau résultant
   result.sort((a, b) => {
+    if (sortType.value === "---") return 0; // Pas de tri
 
-    if (sortType.value === "---") {
-      return;
-    }
+    // Tri alphabétique par titre
+    if (sortType.value === "az") return a.Title.localeCompare(b.Title);
+    if (sortType.value === "za") return b.Title.localeCompare(a.Title);
 
-
-    if (sortType.value === "az") {
-      return a.Title.localeCompare(b.Title);
-    }
-
-    
-    if (sortType.value === "za") {
-      return b.Title.localeCompare(a.Title);
-    }
-
+    // Pour le tri par année, on ne prend que l'année de début
     const yearA = Number(a.Year?.split("–")[0]);
     const yearB = Number(b.Year?.split("–")[0]);
 
-    
-    if (sortType.value === "oldest") {
-      return yearA - yearB;
-    }
-
-    
-    if (sortType.value === "newest") {
-      return yearB - yearA;
-    }
+    // Tri par année de sortie
+    if (sortType.value === "oldest") return yearA - yearB;
+    if (sortType.value === "newest") return yearB - yearA;
 
     return 0;
   });
@@ -132,6 +119,7 @@ const sortedAndFilteredMovies = computed(() => {
   return result;
 });
 
+// Au montage du composant, si un type de catégorie est présent, lance la recherche
 onMounted(() => {
   if (props.type) {
     movieStore.fetchMovies(props.type);
@@ -141,6 +129,7 @@ onMounted(() => {
   }
 });
 
+// Surveille les changements de la prop 'type' et relance une recherche si elle change
 watch(() => props.type, (newVal) => {
   if (newVal) {
     movieStore.fetchMovies(newVal);
@@ -149,8 +138,6 @@ watch(() => props.type, (newVal) => {
 </script>
 
 <style scoped>
-/*  SPRINT 3: FILTRE DESIGN */
-
 .welcome {
   padding: 0px 32px 20px;
 }
@@ -166,34 +153,13 @@ watch(() => props.type, (newVal) => {
   opacity: 0.8;
 }
 
-.nav {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 14px 32px;
-  background: rgba(20,20,20,0.9);
-}
-.left {
-  display: flex;
-  gap: 20px;
-  align-items: center;
-}
-
-.logo {
-  font-weight: 800;
-  color: #e50914;
-  letter-spacing: 1px;
-}
-
 a {
   opacity: 0.8;
 }
 a:hover {
   opacity: 1;
 }
+/* Styles pour la section des filtres et du tri */
 .filters {
   display: flex;
   gap: 12px;
@@ -207,11 +173,12 @@ a:hover {
   border: 1px solid #ccc;
 }
 
-/*  LOADING & ERROR */
+/* Styles pour les messages de chargement et d'erreur */
 .loading {
   color: #444;
   font-style: italic;
   padding: 10px;
+  text-align: center;
 }
 
 .error {
@@ -224,36 +191,36 @@ a:hover {
   font-weight: 500;
 }
 
-/* SPRINT 3: RESPONSIVE GRID */
+/* Grille responsive pour la liste des films */
 .movie-list {
   display: grid;
+  /* Par défaut 5 colonnes sur les grands écrans */
   grid-template-columns: repeat(5, 1fr);
   gap: 20px;
 }
 
-/* Tablet */
+/* Tablettes */
 @media (max-width: 1024px) {
   .movie-list {
     grid-template-columns: repeat(4, 1fr);
   }
 }
 
-/* grande ecran max 900 px */ 
+/* Petits ordinateurs portables */
 @media (max-width: 900px) {
   .movie-list {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
-/* Mobil */
+/* Tablettes en mode portrait */
 @media (max-width: 750px) {
   .movie-list {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-
-/* Mobil */
+/* Mobiles */
 @media (max-width: 600px) {
   .movie-list {
     grid-template-columns: repeat(1, 1fr);
