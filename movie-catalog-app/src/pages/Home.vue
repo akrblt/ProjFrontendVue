@@ -1,6 +1,20 @@
 <template>
+
+  <section class="welcome">
+    <h1>Bienvenue 👋</h1>
+    <p>Découvrez des films que vous allez adorer</p>
+  </section>
   <div>
+     <header class="nav">
+    <div class="left">
+      <span class="logo">MOVIES</span>
+      <router-link to="/">Home</router-link>
+      <router-link to="/category/action">Action</router-link>
+      <router-link to="/category/science">Science</router-link>
+    </div>
+
     <SearchBar />
+  </header>
 
     <!-- ✅ SPRINT 3: TRI & FILTRE -->
     <div class="filters">
@@ -117,6 +131,9 @@ onMounted(() => {
   if (props.type) {
     movieStore.fetchMovies(props.type);
   }
+  else {
+    movieStore.fetchMovies('movie')
+  }
 });
 
 watch(() => props.type, (newVal) => {
@@ -128,6 +145,50 @@ watch(() => props.type, (newVal) => {
 
 <style scoped>
 /*  SPRINT 3: FILTRE DESIGN */
+
+.welcome {
+  padding: 0px 32px 20px;
+}
+
+.welcome h1 {
+  font-size: 32px;
+  margin: 0;
+}
+
+.welcome p {
+  margin-top: 6px;
+  font-size: 16px;
+  opacity: 0.8;
+}
+
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 32px;
+  background: rgba(20,20,20,0.9);
+}
+.left {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.logo {
+  font-weight: 800;
+  color: #e50914;
+  letter-spacing: 1px;
+}
+
+a {
+  opacity: 0.8;
+}
+a:hover {
+  opacity: 1;
+}
 .filters {
   display: flex;
   gap: 12px;

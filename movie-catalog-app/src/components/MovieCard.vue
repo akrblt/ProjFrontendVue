@@ -46,12 +46,17 @@ const toggleFav = () => {
 .movie-card {
   width: 200px;
   text-align: center;
+  cursor:pointer;
+  transition: transform 0.2s ease;
   border-radius: 10px;
   padding: 10px;
+  margin: 20px;
   background: #fff;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
-
+.movie-card {
+  transform: scale(1.08);
+}
 .poster {
   width: 100%;
   height: auto;
@@ -69,5 +74,14 @@ const toggleFav = () => {
   border: none;
   cursor: pointer;
   font-weight: 500;
+}
+img {
+  width: 100%;
+  border-radius: 4px;
+}
+
+p {
+  margin-top: 6px;
+  font-size: 14px;
 }
 </style>

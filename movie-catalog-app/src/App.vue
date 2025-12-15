@@ -1,14 +1,7 @@
 
 <template>
   <div>
-    <nav class="menu">
-      <router-link to="/">Home</router-link>
-      <router-link to="/category/action">Action</router-link>
-      <router-link to="/category/science">Science</router-link>
-      
-      
-
-    </nav>
+   
 
     <router-view />
   </div>
@@ -20,9 +13,15 @@
 
 <style>
 body {
-  font-family: Arial, sans-serif;
   margin: 0;
+  background-color: #979191;
+  color: #e5e5e5;
+  font-family: Inter, Arial, sans-serif;
   padding: 20px;
+}
+a {
+  color: inherit;
+  text-decoration: none;
 }
 .menu {
   display: flex;
