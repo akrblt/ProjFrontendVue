@@ -48,7 +48,7 @@ const props = defineProps({
 });
 
 /* SPRINT 3: TRI & FILTRE STATE */
-const sortType = ref("az");
+const sortType = ref("---");
 const yearFilter = ref("");
 
 /*  SPRINT 3: TRI + FILTRE COMPUTED */
