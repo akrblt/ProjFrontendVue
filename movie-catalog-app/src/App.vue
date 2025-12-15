@@ -39,6 +39,7 @@ body {
   color: #e5e5e5;
   font-family: Inter, Arial, sans-serif;
   padding: 20px;
+  overflow-x: hidden;
 }
 a {
   color: inherit;
