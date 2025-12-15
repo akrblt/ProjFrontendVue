@@ -8,7 +8,7 @@ Ce projet est une application web développée avec Vue.js qui permet aux utilis
 
 ## Aperçu
 
-![AperçuRechercheFilm.png](movie-catalog-app/src/assets/AperçuRechercheFilm.png)
+![AperçuRechercheFilm.png](../movie-catalog-app/src/assets/AperçuRechercheFilm.png)
 
 ## Fonctionnalités
 

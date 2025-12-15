@@ -4,17 +4,20 @@ Ce document décrit l'architecture et l'organisation des fichiers du projet "Med
 
 ## Structure globale des dossiers
 
-Le code source de l'application se trouve dans le dossier `src/`. Il est organisé de la manière suivante :
+Le projet est organisé à la racine comme suit :
 
 ```
-src/
-├── assets/         # Fichiers statiques (CSS, images, polices)
-├── components/     # Composants Vue réutilisables
-├── layouts/        # Composants de mise en page (ex: header, footer)
-├── pages/          # Composants Vue correspondant aux pages de l'application
-├── router/         # Configuration du routage (Vue Router)
-├── services/       # Modules pour la communication avec les APIs externes
-└── store/          # Gestion de l'état global (Pinia)
+/
+├── docs/                 # Documentation du projet (spécifications, architecture)
+└── movie-catalog-app/    # Contient l'application Vue.js complète
+    └── src/
+        ├── assets/       # Fichiers statiques (CSS, images, polices)
+        ├── components/   # Composants Vue réutilisables
+        ├── layouts/      # Composants de mise en page (ex: header, footer)
+        ├── pages/        # Composants Vue correspondant aux pages de l'application
+        ├── router/       # Configuration du routage (Vue Router)
+        ├── services/     # Modules pour la communication avec les APIs externes
+        └── store/        # Gestion de l'état global (Pinia)
 ```
 
 ## Description des dossiers
@@ -33,12 +36,6 @@ Ce répertoire contient des composants Vue "agnostiques" et réutilisables à tr
 *   **`MovieCard.vue`**: Une carte pour afficher les informations de base d'un film dans une liste.
 *   **`MovieDetail.vue`**: Affiche la vue détaillée d'un film.
 *   **`SearchBar.vue`**: La barre de recherche utilisée sur la page d'accueil.
-
-### `src/layouts`
-
-Les layouts sont des composants qui enveloppent les pages. Ils permettent de définir une structure commune (par exemple, une barre de navigation et un pied de page) pour un ensemble de pages.
-
-*   **`DefaultLayout.vue`**: La mise en page par défaut utilisée pour toutes les pages de l'application.
 
 ### `src/pages`
 
