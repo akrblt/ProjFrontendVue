@@ -30,7 +30,7 @@
     </div>
 
     <!-- Affiche un message de chargement pendant la récupération des données -->
-    <div v-if="movieStore.loading" class="loading">Chargement en cours...</div>
+    <div v-if="movieStore.loading" class="loading">Chargement en cours...<Loader /> </div>
 
     <!-- Affiche un message d'erreur si la récupération échoue -->
     <div v-else-if="movieStore.error" class="error">
@@ -52,6 +52,7 @@
 import MovieCard from '@/components/MovieCard.vue';
 import { useMovieStore } from '@/store/movieStore';
 import { onMounted, watch, ref, computed } from 'vue';
+import Loader from "@/components/Loader.vue";
 
 const movieStore = useMovieStore();
 
