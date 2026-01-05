@@ -38,7 +38,7 @@
 
 <script setup>
 import { onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useMovieStore } from '@/store/movieStore';
 
 // Récupère l'instance de la route actuelle pour accéder aux paramètres de l'URL
